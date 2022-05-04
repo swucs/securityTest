@@ -48,8 +48,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/config").hasRole("ADMIN")
                 .anyRequest().authenticated()
 
-                .and()
+        .and()
                 .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/login_proc")
+                .defaultSuccessUrl("/") //로그인 성공후 이동할 URL
+                .permitAll()    //로그인 페이지는 인증불필요
         ;
     }
 }
