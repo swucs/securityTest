@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
@@ -26,6 +27,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+    @Autowired
+    private AuthenticationFailureHandler customAuthenticationFailureHandler;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -52,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/users", "/login").permitAll()
+                .antMatchers("/", "/users", "/login*").permitAll()
                 .antMatchers("/mypage").hasRole("USER")
                 .antMatchers("/messages").hasRole("MANAGER")
                 .antMatchers("/config").hasRole("ADMIN")
@@ -61,10 +65,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
                 .formLogin()
                 .loginPage("/login")
+                .loginProcessingUrl("/login_proc")
                 .defaultSuccessUrl("/") //로그인 성공후 이동할 URL
                 .authenticationDetailsSource(formAuthenticationDetailsSource)
                 .successHandler(customAuthenticationSuccessHandler)
-                .loginProcessingUrl("/login_proc")
+                .failureHandler(customAuthenticationFailureHandler)
         ;
     }
 }
