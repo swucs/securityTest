@@ -64,7 +64,7 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(ajaxDeniedHandler())
                 ;
 
-        http.csrf().disable();
+//        http.csrf().disable();
     }
 
     private AccessDeniedHandler ajaxDeniedHandler() {

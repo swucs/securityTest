@@ -1,5 +1,8 @@
 package com.example.corespringsecurity.security.common;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
@@ -20,6 +23,11 @@ public class AjaxLoginAuthenticationEntryPoint implements AuthenticationEntryPoi
      */
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "UnAuthorized");
+        //sendError로 하면 response body가 생성되지 않음 (이유 모름)
+//        response.sendError(HttpStatus.UNAUTHORIZED.value(), "UnAuthorized");
+
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.getWriter().print("Unauthorized");
     }
 }
