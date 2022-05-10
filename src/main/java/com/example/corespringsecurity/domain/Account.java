@@ -4,8 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -33,7 +33,7 @@ public class Account implements Serializable {
     private String password;
 
     @OneToMany(mappedBy = "account", cascade={CascadeType.ALL}, orphanRemoval = true)
-    private Set<AccountRoles> accountRoles = new HashSet<>();
+    private List<AccountRoles> accountRoles = new ArrayList<>();
 
     public void addAccountRoles(AccountRoles accountRoles) {
         this.accountRoles.add(accountRoles);
