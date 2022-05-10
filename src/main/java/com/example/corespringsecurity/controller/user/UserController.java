@@ -2,7 +2,7 @@ package com.example.corespringsecurity.controller.user;
 
 
 import com.example.corespringsecurity.domain.Account;
-import com.example.corespringsecurity.domain.AccountDto;
+import com.example.corespringsecurity.dto.AccountDto;
 import com.example.corespringsecurity.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
