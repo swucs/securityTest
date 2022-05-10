@@ -3,6 +3,7 @@ package com.example.corespringsecurity.security.configs;
 import com.example.corespringsecurity.security.common.FormAuthenticationDetailsSource;
 import com.example.corespringsecurity.security.factory.UrlResourcesMapFactoryBean;
 import com.example.corespringsecurity.security.filter.AjaxLoginProcessingFilter;
+import com.example.corespringsecurity.security.filter.PermitAllFilter;
 import com.example.corespringsecurity.security.handler.CustomAccessDeniedHandler;
 import com.example.corespringsecurity.security.metadatasource.UrlFilterInvocationSecurityMetadataSource;
 import com.example.corespringsecurity.security.provider.FormAuthenticationProvider;
@@ -54,6 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private SecurityResourceService securityResourceService;
+
+    private String[] permitAllResources = {"/", "login", "/user/login/**"};
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -118,8 +121,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    public FilterSecurityInterceptor customFilterSecurityInterceptor() throws Exception {
-        FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
+    public PermitAllFilter customFilterSecurityInterceptor() throws Exception {
+        PermitAllFilter filterSecurityInterceptor = new PermitAllFilter(permitAllResources);
         filterSecurityInterceptor.setSecurityMetadataSource(urlFilterInvocationSecurityMetadataSource());
         filterSecurityInterceptor.setAccessDecisionManager(affirmativeBased());
         filterSecurityInterceptor.setAuthenticationManager(authenticationManagerBean());
