@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class ResourcesController {
@@ -47,7 +49,7 @@ public class ResourcesController {
 		ModelMapper modelMapper = new ModelMapper();
 		Role role = roleRepository.findByRoleName(resourcesDto.getRoleName());
 		Resources resources = modelMapper.map(resourcesDto, Resources.class);
-		Set<RoleResources> roleResources = new HashSet<>();
+		List<RoleResources> roleResources = new ArrayList<>();
 		roleResources.add(new RoleResources(resources, role));
 		resources.setRoleResources(roleResources);
 
@@ -67,7 +69,7 @@ public class ResourcesController {
 //		roleSet.add(new Role());
 //		resources.setRoleSet(roleSet);
 
-		Set<RoleResources> roleResourcesSet = new HashSet<>();
+		List<RoleResources> roleResourcesSet = new ArrayList<>();
 		roleResourcesSet.add(new RoleResources());
 		resources.setRoleResources(roleResourcesSet);
 		model.addAttribute("resources", resources);
@@ -84,6 +86,11 @@ public class ResourcesController {
 
 		ModelMapper modelMapper = new ModelMapper();
 		ResourcesDto resourcesDto = modelMapper.map(resources, ResourcesDto.class);
+		List<String> roleNames = resourcesDto.getRoleResources().stream()
+				.map(rr -> rr.getRole().getRoleName())
+				.collect(Collectors.toList());
+		resourcesDto.setRoleNames(roleNames);
+
 		model.addAttribute("resources", resourcesDto);
 
 		return "admin/resource/detail";

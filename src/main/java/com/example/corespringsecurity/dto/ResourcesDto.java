@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -21,6 +22,7 @@ public class ResourcesDto{
     private int orderNum;
     private String resourceType;
     private String roleName;
-    private Set<RoleResources> roleResources;
+    private List<RoleResources> roleResources;
+    private List<String> roleNames;
 
 }

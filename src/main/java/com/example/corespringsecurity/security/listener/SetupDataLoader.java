@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -113,9 +114,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     public Resources createResourceIfNotFound(String resourceName, String httpMethod, Set<Role> roleSet, String resourceType) {
         Resources resources = resourcesRepository.findByResourceNameAndHttpMethod(resourceName, httpMethod);
 
-        Set<RoleResources> roleResourcesSet = roleSet.stream()
+        List<RoleResources> roleResourcesSet = roleSet.stream()
                 .map(r -> new RoleResources(resources, r))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
 
         Resources newResources = resources;
