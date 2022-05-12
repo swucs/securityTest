@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -22,7 +23,7 @@ public class ResourcesDto{
     private int orderNum;
     private String resourceType;
     private String roleName;
-    private List<RoleResources> roleResources;
-    private List<String> roleNames;
+    private List<RoleResources> roleResources = new ArrayList<>();
+    private List<String> roleNames = new ArrayList<>();
 
 }

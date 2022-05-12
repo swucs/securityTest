@@ -3,22 +3,30 @@ package com.example.corespringsecurity.security.factory;
 import com.example.corespringsecurity.security.service.SecurityResourceService;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class UrlResourcesMapFactoryBean implements FactoryBean<LinkedHashMap<RequestMatcher, List<ConfigAttribute>>> {
+public class MethodResourcesFactoryBean implements FactoryBean<LinkedHashMap<String, List<ConfigAttribute>>> {
 
     private SecurityResourceService securityResourceService;
-    private LinkedHashMap<RequestMatcher, List<ConfigAttribute>> resourceMap;
+    private LinkedHashMap<String, List<ConfigAttribute>> resourceMap;
+    private String resourceType;
+
+//    public MethodResourcesFactoryBean(SecurityResourceService securityResourceService) {
+//        this.securityResourceService = securityResourceService;
+//    }
 
     public void setSecurityResourceService(SecurityResourceService securityResourceService) {
         this.securityResourceService = securityResourceService;
     }
 
+    public void setResourceType(String resourceType) {
+        this.resourceType = resourceType;
+    }
+
     @Override
-    public LinkedHashMap<RequestMatcher, List<ConfigAttribute>> getObject() throws Exception {
+    public LinkedHashMap<String, List<ConfigAttribute>> getObject() {
 
         if (resourceMap == null) {
             init();
@@ -28,7 +36,11 @@ public class UrlResourcesMapFactoryBean implements FactoryBean<LinkedHashMap<Req
     }
 
     private void init() {
-        resourceMap = securityResourceService.getResourceList();
+        if ("method".equals(resourceType)) {
+            resourceMap = securityResourceService.getMethodResourceList();
+        } else if ("pointcut".equals(resourceType)) {
+            resourceMap = securityResourceService.getPointcutResourceList();
+        }
     }
 
     @Override

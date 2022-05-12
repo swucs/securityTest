@@ -52,28 +52,29 @@ public class PermitAllFilter extends FilterSecurityInterceptor {
 
 
     @Override
-    public void invoke(FilterInvocation filterInvocation) throws IOException, ServletException {
-        if (this.isApplied(filterInvocation) && this.observeOncePerRequest) {
-            filterInvocation.getChain().doFilter(filterInvocation.getRequest(), filterInvocation.getResponse());
+    public void invoke(FilterInvocation fi) throws IOException, ServletException {
+
+        if ((fi.getRequest() != null) && (fi.getRequest().getAttribute(FILTER_APPLIED) != null)
+                && super.isObserveOncePerRequest()) {
+            // filter already applied to this request and user wants us to observe
+            // once-per-request handling, so don't re-do security checking
+            fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
         } else {
-            if (filterInvocation.getRequest() != null && this.observeOncePerRequest) {
-                filterInvocation.getRequest().setAttribute("__spring_security_filterSecurityInterceptor_filterApplied", Boolean.TRUE);
+            // first time this request being called, so perform security checking
+            if (fi.getRequest() != null) {
+                fi.getRequest().setAttribute(FILTER_APPLIED, Boolean.TRUE);
             }
 
-            InterceptorStatusToken token = beforeInvocation(filterInvocation);
+            InterceptorStatusToken token = beforeInvocation(fi);
 
             try {
-                filterInvocation.getChain().doFilter(filterInvocation.getRequest(), filterInvocation.getResponse());
+                fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
             } finally {
                 super.finallyInvocation(token);
             }
 
-            afterInvocation(token, (Object)null);
+            super.afterInvocation(token, null);
         }
-    }
-
-    private boolean isApplied(FilterInvocation filterInvocation) {
-        return filterInvocation.getRequest() != null && filterInvocation.getRequest().getAttribute("__spring_security_filterSecurityInterceptor_filterApplied") != null;
     }
 
 }

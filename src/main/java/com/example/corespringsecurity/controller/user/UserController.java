@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class UserController {
@@ -40,5 +41,15 @@ public class UserController {
 
 		return "redirect:/";
 	}
+
+	@GetMapping(value="/order")
+	@ResponseBody
+	public String order() throws Exception {
+		userService.order();
+		return "order";
+	}
+
+
+
 
 }

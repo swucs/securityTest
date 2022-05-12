@@ -74,9 +74,9 @@ public class ResourcesController {
 //		roleSet.add(new Role());
 //		resources.setRoleSet(roleSet);
 
-		List<RoleResources> roleResourcesSet = new ArrayList<>();
-		roleResourcesSet.add(new RoleResources());
-		resources.setRoleResources(roleResourcesSet);
+//		List<RoleResources> roleResourcesSet = new ArrayList<>();
+//		roleResourcesSet.add(new RoleResources());
+//		resources.setRoleResources(roleResourcesSet);
 		model.addAttribute("resources", resources);
 
 		return "admin/resource/detail";

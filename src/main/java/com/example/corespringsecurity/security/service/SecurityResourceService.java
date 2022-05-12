@@ -31,8 +31,46 @@ public class SecurityResourceService {
             List<ConfigAttribute> configAttributeList = new ArrayList<>();
             re.getRoleResources().forEach(rr -> {
                 configAttributeList.add(new SecurityConfig(rr.getRole().getRoleName()));
-                result.put(new AntPathRequestMatcher(re.getResourceName()), configAttributeList);
             });
+            result.put(new AntPathRequestMatcher(re.getResourceName()), configAttributeList);
+        });
+
+        return result;
+    }
+
+    /**
+     * DB에 저장된 권한 정보를 Security에서 원하는 형태(LinkedHashMap<String, List<ConfigAttribute>>)로 반환한다.
+     * @return
+     */
+    public LinkedHashMap<String, List<ConfigAttribute>> getMethodResourceList() {
+        LinkedHashMap<String, List<ConfigAttribute>> result = new LinkedHashMap<>();
+        List<Resources> resourcesList = resourcesRepository.findAllMethodResources();
+
+        resourcesList.forEach(re -> {
+            List<ConfigAttribute> configAttributeList = new ArrayList<>();
+            re.getRoleResources().forEach(rr -> {
+                configAttributeList.add(new SecurityConfig(rr.getRole().getRoleName()));
+            });
+            result.put(re.getResourceName(), configAttributeList);
+        });
+
+        return result;
+    }
+
+    /**
+     * DB에 저장된 권한 정보를 Security에서 원하는 형태(LinkedHashMap<String, List<ConfigAttribute>>)로 반환한다.
+     * @return
+     */
+    public LinkedHashMap<String, List<ConfigAttribute>> getPointcutResourceList() {
+        LinkedHashMap<String, List<ConfigAttribute>> result = new LinkedHashMap<>();
+        List<Resources> resourcesList = resourcesRepository.findAllPointcutResources();
+
+        resourcesList.forEach(re -> {
+            List<ConfigAttribute> configAttributeList = new ArrayList<>();
+            re.getRoleResources().forEach(rr -> {
+                configAttributeList.add(new SecurityConfig(rr.getRole().getRoleName()));
+            });
+            result.put(re.getResourceName(), configAttributeList);
         });
 
         return result;
